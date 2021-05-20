@@ -133,8 +133,8 @@ for val_year in range(1981, 2017):
     months_val_index = pisco_val.groupby("time.month").groups
 
     # Removing val_year - 1 from predictors data
-    sel_db_val = sel_db.query("year!=@val_year-1")
-    sel_db_val["const"] = 1
+    sel_db_val = sel_db.query("year!=@val_year-1").copy()
+    sel_db_val.loc[:, "const"] = 1
 
     for mnum, mmodel in full_model.items():
         print(f"Computing validating month number {mnum}", flush=True)
