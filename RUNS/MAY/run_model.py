@@ -101,6 +101,12 @@ for mnum, mindex in months_index.items():
         print(f"Couldn't find model for month number {mnum}", flush=True)
 
 #%%
+# Scale down and close cluster
+client.close()
+cluster.scale(jobs=0)
+cluster.close()
+
+#%%
 import statsmodels.api as sm
 
 # Validation model container
