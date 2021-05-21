@@ -2,6 +2,7 @@
 import pickle
 
 import pandas as pd
+import statsmodels.api as sm
 import xarray as xr
 from dask import compute, delayed
 from dask.distributed import Client
@@ -101,7 +102,6 @@ for mnum, mindex in months_index.items():
         print(f"Couldn't find model for month number {mnum}", flush=True)
 
 #%%
-import statsmodels.api as sm
 
 OLS = delayed(sm.OLS)
 # Validation model container
