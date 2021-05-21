@@ -140,7 +140,8 @@ for val_year in range(1981, 2017):
                     new_model = OLS(
                         pisco_val.isel(time=months_val_index[mnum])
                         .sel(lat=lat, lon=lon)
-                        .data,
+                        .to_dataframe()
+                        .reset_index(drop=True)["Prec"],
                         sel_db_val[pixel_vars + ["const"]],
                     ).fit()
                     result_val.append(((lat, lon), (pixel_vars, new_model)))
@@ -150,7 +151,8 @@ for val_year in range(1981, 2017):
                     new_model = OLS(
                         pisco_val.isel(time=months_val_index[mnum][:-1])
                         .sel(lat=lat, lon=lon)
-                        .data,
+                        .to_dataframe()
+                        .reset_index(drop=True)["Prec"],
                         sel_db_val.iloc[1:][pixel_vars + ["const"]],
                     ).fit()
                     result_val.append(((lat, lon), (pixel_vars, new_model)))
