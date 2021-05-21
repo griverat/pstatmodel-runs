@@ -103,6 +103,7 @@ for mnum, mindex in months_index.items():
 #%%
 import statsmodels.api as sm
 
+OLS = delayed(sm.OLS)
 # Validation model container
 full_model_val = {}
 
@@ -136,7 +137,7 @@ for val_year in range(1981, 2017):
         if mnum in [1, 2, 3, 4]:
             for (lat, lon), (pixel_vars, pixel_model, _) in mmodel:
                 if not isinstance(pixel_model, float) and len(pixel_vars) != 0:
-                    new_model = sm.OLS(
+                    new_model = OLS(
                         pisco_val.isel(time=months_val_index[mnum])
                         .sel(lat=lat, lon=lon)
                         .data,
@@ -146,7 +147,7 @@ for val_year in range(1981, 2017):
         if mnum in [10, 11, 12]:
             for (lat, lon), (pixel_vars, pixel_model, _) in mmodel:
                 if not isinstance(pixel_model, float) and len(pixel_vars) != 0:
-                    new_model = sm.OLS(
+                    new_model = OLS(
                         pisco_val.isel(time=months_val_index[mnum][:-1])
                         .sel(lat=lat, lon=lon)
                         .data,
