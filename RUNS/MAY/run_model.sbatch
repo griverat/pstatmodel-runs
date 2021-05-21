@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH --partition mpi_long2
+#SBATCH --partition mpi_long1
 #SBATCH --ntasks 1
 #SBATCH --time 5-00:00:00
 #SBATCH --mem-per-cpu 120000
