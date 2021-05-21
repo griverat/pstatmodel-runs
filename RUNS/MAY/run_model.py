@@ -132,7 +132,7 @@ for val_year in range(1981, 2017):
     sel_db_val = sel_db.query("year!=@val_year-1").reset_index(drop=True)
 
     for mnum, mmodel in full_model.items():
-        print(f"Computing validating month number {mnum}", flush=True)
+        print(f"Computing month number {mnum}", flush=True)
         result_val = []
         if mnum in [1, 2, 3, 4]:
             for (lat, lon), (pixel_vars, pixel_model, _) in mmodel:
