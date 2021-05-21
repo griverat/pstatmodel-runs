@@ -37,14 +37,19 @@ stepwise_selection = delayed(base.stepwise_selection)
 
 full_model = {}
 
+sel_db_model = sel_db.reset_index(drop=True)
+
 for mnum, mindex in months_index.items():
     if mnum in [1, 2, 3, 4]:
         full_model[mnum] = [
             (
                 (lat, lon),
                 stepwise_selection(
-                    sel_db,
-                    pisco.isel(time=mindex).sel(lat=lat, lon=lon).data,
+                    sel_db_model,
+                    pisco.isel(time=mindex)
+                    .sel(lat=lat, lon=lon)
+                    .to_dataframe()
+                    .reset_index(drop=True)["Prec"],
                     threshold_in=0.05,
                     threshold_out=0.1,
                     max_vars=12,
@@ -60,8 +65,11 @@ for mnum, mindex in months_index.items():
             (
                 (lat, lon),
                 stepwise_selection(
-                    sel_db.iloc[1:],
-                    pisco.isel(time=mindex[:-1]).sel(lat=lat, lon=lon).data,
+                    sel_db_model.iloc[1:],
+                    pisco.isel(time=mindex[:-1])
+                    .sel(lat=lat, lon=lon)
+                    .to_dataframe()
+                    .reset_index(drop=True)["Prec"],
                     threshold_in=0.05,
                     threshold_out=0.1,
                     max_vars=12,
