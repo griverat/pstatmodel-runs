@@ -27,7 +27,7 @@ pisco = xr.decode_cf(pisco).Prec
 
 #%%
 # dvars = list(predictors.columns)
-sel_db = predictors.loc[1980:2015]  # [dvars].reset_index(drop=True)
+sel_db = predictors.loc[1980:2015].copy()  # [dvars].reset_index(drop=True)
 months_index = pisco.groupby("time.month").groups
 
 #%%
