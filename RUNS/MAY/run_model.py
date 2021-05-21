@@ -106,6 +106,7 @@ import statsmodels.api as sm
 OLS = delayed(sm.OLS)
 # Validation model container
 full_model_val = {}
+sel_db.loc[:, "const"] = 1
 
 for val_year in range(1981, 2017):
 
