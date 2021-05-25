@@ -11,3 +11,4 @@ conda activate pangeo
 echo $(hostname -i)
 
 python run_model.py
+python post_run.py
