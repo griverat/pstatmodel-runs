@@ -28,8 +28,7 @@ pisco = xr.decode_cf(pisco).Prec
 pisco = pisco.sel(time=slice("1981-10-01", "2016-05-01"))
 
 #%%
-# dvars = list(predictors.columns)
-sel_db = predictors.loc[1980:2015].copy()  # [dvars].reset_index(drop=True)
+sel_db = predictors.loc[1981:2015].copy()
 months_index = pisco.groupby("time.month").groups
 
 #%%
@@ -117,7 +116,7 @@ OLS = delayed(sm.OLS)
 full_model_val = {}
 sel_db.loc[:, "const"] = 1
 
-for val_year in range(1981, 2017):
+for val_year in range(1982, 2017):
 
     print(f"\nComputing validation model for year {val_year}", flush=True)
 
