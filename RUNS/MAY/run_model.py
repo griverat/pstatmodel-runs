@@ -25,6 +25,7 @@ pisco = (
 )
 pisco.time.attrs["calendar"] = "360_day"
 pisco = xr.decode_cf(pisco).Prec
+pisco = pisco.sel(time=slice("1981-10-01", "2016-05-01"))
 
 #%%
 # dvars = list(predictors.columns)
