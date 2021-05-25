@@ -65,7 +65,7 @@ for mnum, mindex in months_index.items():
             (
                 (lat, lon),
                 stepwise_selection(
-                    sel_db_model.iloc[1:],
+                    sel_db_model.iloc[1:].reset_index(drop=True),
                     pisco.isel(time=mindex[:-1])
                     .sel(lat=lat, lon=lon)
                     .to_dataframe()
@@ -160,7 +160,9 @@ for val_year in range(1982, 2017):
                         .sel(lat=lat, lon=lon)
                         .to_dataframe()
                         .reset_index(drop=True)["Prec"],
-                        sel_db_val.iloc[1:][pixel_vars + ["const"]],
+                        sel_db_val.iloc[1:].reset_index(drop=True)[
+                            pixel_vars + ["const"]
+                        ],
                     ).fit()
                     result_val.append(((lat, lon), (pixel_vars, new_model)))
         full_model_val[val_year][mnum] = result_val
