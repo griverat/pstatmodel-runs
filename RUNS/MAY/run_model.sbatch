@@ -7,4 +7,7 @@
 #SBATCH --output modelrun-log-%J.txt
 
 conda activate pangeo
+
+echo $(hostname -i)
+
 python run_model.py
