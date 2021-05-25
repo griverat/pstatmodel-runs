@@ -111,7 +111,6 @@ for mnum, mindex in months_index.items():
 
 #%%
 
-OLS = delayed(sm.OLS)
 # Validation model container
 full_model_val = {}
 sel_db.loc[:, "const"] = 1
@@ -145,7 +144,7 @@ for val_year in range(1982, 2017):
         if mnum in [1, 2, 3, 4]:
             for (lat, lon), (pixel_vars, pixel_model, _) in mmodel:
                 if not isinstance(pixel_model, float) and len(pixel_vars) != 0:
-                    new_model = OLS(
+                    new_model = sm.OLS(
                         pisco_val.isel(time=months_val_index[mnum])
                         .sel(lat=lat, lon=lon)
                         .to_dataframe()
@@ -156,7 +155,7 @@ for val_year in range(1982, 2017):
         if mnum in [10, 11, 12]:
             for (lat, lon), (pixel_vars, pixel_model, _) in mmodel:
                 if not isinstance(pixel_model, float) and len(pixel_vars) != 0:
-                    new_model = OLS(
+                    new_model = sm.OLS(
                         pisco_val.isel(time=months_val_index[mnum][:-1])
                         .sel(lat=lat, lon=lon)
                         .to_dataframe()
