@@ -97,6 +97,12 @@ for mnum, mmodel in full_model.items():
     print(f"Saving done for month number: {mnum}\n", flush=True)
 
 #%%
+# Scale down and close cluster
+client.close()
+cluster.scale(jobs=0)
+cluster.close()
+
+#%%
 full_model = {}
 for mnum, mindex in months_index.items():
     try:
@@ -177,9 +183,3 @@ for year_val_save, model_val_save in full_model_val.items():
     ) as handle:
         pickle.dump(model_val_save, handle, protocol=pickle.HIGHEST_PROTOCOL)
     print(f"Saving done for validation year: {year_val_save}", flush=True)
-
-#%%
-# Scale down and close cluster
-client.close()
-cluster.scale(jobs=0)
-cluster.close()
