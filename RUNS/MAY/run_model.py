@@ -86,8 +86,9 @@ for mnum, mindex in months_index.items():
 #%%
 
 for mnum, mmodel in full_model.items():
+    print(f"\nStarting computing month number: {mnum}", flush=True)
     res = compute(mmodel)
-    print(f"\nDone computing month number: {mnum}", flush=True)
+    print(f"Done computing month number: {mnum}", flush=True)
     print("Starting save", flush=True)
     with open(
         f"/data/users/grivera/pstatmodel_data/RUNS/MAY/model_may.{mnum:02d}.pickle",
@@ -111,7 +112,7 @@ for mnum, mindex in months_index.items():
             "rb",
         ) as handle:
             full_model[mnum] = pickle.load(handle)
-            print(f"Succesfully read model for month number {mnum}", flush=True)
+        print(f"Succesfully read model for month number {mnum}", flush=True)
     except:
         print(f"Couldn't find model for month number {mnum}", flush=True)
 
