@@ -124,7 +124,7 @@ for val_year in range(1982, 2017):
             "rb",
         ) as handle:
             full_model_val[val_year] = pickle.load(handle)
-        print(f"\nSuccesfully read validation model for year {val_year}", flush=True)
+        print(f"Succesfully read validation model for year {val_year}", flush=True)
     except:
         print(f"Couldn't find model for val year {val_year}", flush=True)
 
