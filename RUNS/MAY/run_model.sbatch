@@ -8,7 +8,23 @@
 
 conda activate pangeo
 
-echo $(hostname -i)
+ipnip=$(hostname -i)
+user='grivera'
+host='10.10.90.12'
+
+echo -e "
+    Copy/Paste this in your local terminal to ssh tunnel with remote
+    dask dashboard
+    -----------------------------------------------------------------
+    ssh -N -L 8787:$ipnip:8787 $user@$host
+    -----------------------------------------------------------------
+    
+    From outside the network.
+    Using an ssh key with host and port details in .ssh/config
+    -----------------------------------------------------------------
+    ssh -N -L 8787:$ipnip:8787 $user
+    -----------------------------------------------------------------
+    "
 
 python run_model.py
 python post_run.py
