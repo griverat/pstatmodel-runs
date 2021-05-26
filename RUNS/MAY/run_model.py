@@ -40,6 +40,8 @@ full_model = {}
 sel_db_model = sel_db.reset_index(drop=True)
 
 for mnum, mindex in months_index.items():
+    if mnum in [5, 6, 7, 8, 9]:
+        continue
     full_model[mnum] = [
         (
             (lat, lon),
