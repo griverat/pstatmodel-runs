@@ -65,7 +65,7 @@ for mnum, mindex in months_index.items():
 #%%
 
 for mnum, mmodel in full_model.items():
-    print(f"\nStarting computing month number: {mnum}", flush=True)
+    print(f"\nStarting computation of month number: {mnum}", flush=True)
     res = compute(mmodel)
     print(f"Done computing month number: {mnum}", flush=True)
     print("Starting save", flush=True)
