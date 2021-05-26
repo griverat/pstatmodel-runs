@@ -131,17 +131,16 @@ for val_year in range(1982, 2017):
 for year, validation_model in full_model_val.items():
     print(f"\nStarting computation for year {year}", flush=True)
     for mnum, nmodel in validation_model.items():
-        sel_time = f"{year}-{mnum}-15"
+        if mnum in [1, 2, 3, 4]:
+            sel_time = f"{year}-{mnum}-15"
+        elif mnum in [10, 11, 12]:
+            sel_time = f"{year-1}-{mnum}-15"
         sel_time = pred_data_val.sel(time=sel_time).time.data
         for (lat, lon), (pixel_vars, pixel_model) in nmodel:
-            if mnum in [1, 2, 3, 4]:
-                _sub = 1
-            elif mnum in [10, 11, 12]:
-                _sub = 0
             pred_data_val.loc[
                 dict(lat=lat, lon=lon, time=sel_time)
             ] = pixel_model.predict(
-                new_pred.loc[year - _sub, pixel_model.params.index].values
+                new_pred.loc[year - 1, pixel_model.params.index].values
             )[
                 0
             ]
