@@ -40,46 +40,25 @@ full_model = {}
 sel_db_model = sel_db.reset_index(drop=True)
 
 for mnum, mindex in months_index.items():
-    if mnum in [1, 2, 3, 4]:
-        full_model[mnum] = [
-            (
-                (lat, lon),
-                stepwise_selection(
-                    sel_db_model,
-                    pisco.isel(time=mindex)
-                    .sel(lat=lat, lon=lon)
-                    .to_dataframe()
-                    .reset_index(drop=True)["Prec"],
-                    threshold_in=0.05,
-                    threshold_out=0.1,
-                    max_vars=12,
-                    min_vars=4,
-                    verbose=False,
-                ),
-            )
-            for lat in pisco.lat.data
-            for lon in pisco.lon.data
-        ]
-    elif mnum in [10, 11, 12]:
-        full_model[mnum] = [
-            (
-                (lat, lon),
-                stepwise_selection(
-                    sel_db_model.iloc[1:].reset_index(drop=True),
-                    pisco.isel(time=mindex[:-1])
-                    .sel(lat=lat, lon=lon)
-                    .to_dataframe()
-                    .reset_index(drop=True)["Prec"],
-                    threshold_in=0.05,
-                    threshold_out=0.1,
-                    max_vars=12,
-                    min_vars=4,
-                    verbose=False,
-                ),
-            )
-            for lat in pisco.lat.data
-            for lon in pisco.lon.data
-        ]
+    full_model[mnum] = [
+        (
+            (lat, lon),
+            stepwise_selection(
+                sel_db_model,
+                pisco.isel(time=mindex)
+                .sel(lat=lat, lon=lon)
+                .to_dataframe()
+                .reset_index(drop=True)["Prec"],
+                threshold_in=0.05,
+                threshold_out=0.1,
+                max_vars=12,
+                min_vars=4,
+                verbose=False,
+            ),
+        )
+        for lat in pisco.lat.data
+        for lon in pisco.lon.data
+    ]
 
     print(f"Month number {mnum} ready for computation\n", flush=True)
 
@@ -148,30 +127,16 @@ for val_year in range(1982, 2017):
     for mnum, mmodel in full_model.items():
         print(f"Computing month number {mnum}", flush=True)
         result_val = []
-        if mnum in [1, 2, 3, 4]:
-            for (lat, lon), (pixel_vars, pixel_model, _) in mmodel:
-                if not isinstance(pixel_model, float) and len(pixel_vars) != 0:
-                    new_model = sm.OLS(
-                        pisco_val.isel(time=months_val_index[mnum])
-                        .sel(lat=lat, lon=lon)
-                        .to_dataframe()
-                        .reset_index(drop=True)["Prec"],
-                        sel_db_val[pixel_vars + ["const"]],
-                    ).fit()
-                    result_val.append(((lat, lon), (pixel_vars, new_model)))
-        if mnum in [10, 11, 12]:
-            for (lat, lon), (pixel_vars, pixel_model, _) in mmodel:
-                if not isinstance(pixel_model, float) and len(pixel_vars) != 0:
-                    new_model = sm.OLS(
-                        pisco_val.isel(time=months_val_index[mnum][:-1])
-                        .sel(lat=lat, lon=lon)
-                        .to_dataframe()
-                        .reset_index(drop=True)["Prec"],
-                        sel_db_val.iloc[1:].reset_index(drop=True)[
-                            pixel_vars + ["const"]
-                        ],
-                    ).fit()
-                    result_val.append(((lat, lon), (pixel_vars, new_model)))
+        for (lat, lon), (pixel_vars, pixel_model, _) in mmodel:
+            if not isinstance(pixel_model, float) and len(pixel_vars) != 0:
+                new_model = sm.OLS(
+                    pisco_val.isel(time=months_val_index[mnum])
+                    .sel(lat=lat, lon=lon)
+                    .to_dataframe()
+                    .reset_index(drop=True)["Prec"],
+                    sel_db_val[pixel_vars + ["const"]],
+                ).fit()
+                result_val.append(((lat, lon), (pixel_vars, new_model)))
         full_model_val[val_year][mnum] = result_val
     print(f"Done validation year {val_year}\n", flush=True)
 

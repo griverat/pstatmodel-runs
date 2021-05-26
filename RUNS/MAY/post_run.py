@@ -86,14 +86,9 @@ for mnum, nmodel in full_model.items():
         if not isinstance(pixel_model, float) and len(pixel_vars) != 0:
             #             pixel_model, thresh_in = pixel_model
             sel_time = pred_data.time.isel(time=pred_groups[mnum]).data
-            if mnum in [1, 2, 3, 4]:
-                pred_data.loc[
-                    dict(lat=lat, lon=lon, time=sel_time)
-                ] = pixel_model.predict(new_pred[pixel_model.params.index])
-            elif mnum in [10, 11, 12]:
-                pred_data.loc[
-                    dict(lat=lat, lon=lon, time=sel_time[:-1])
-                ] = pixel_model.predict(new_pred.iloc[1:][pixel_model.params.index])
+            pred_data.loc[dict(lat=lat, lon=lon, time=sel_time)] = pixel_model.predict(
+                new_pred[pixel_model.params.index]
+            )
             metric_data.loc[dict(lat=lat, lon=lon, month=mnum)] = pixel_model.rsquared
             metric2_data.loc[
                 dict(lat=lat, lon=lon, month=mnum)
