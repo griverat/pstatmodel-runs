@@ -41,7 +41,7 @@ pred_data = xr.DataArray(
     coords=[
         (
             "time",
-            pd.date_range("1981-01", "2016-12", freq="MS") + pd.DateOffset(days=14),
+            pd.date_range("1981-10", "2016-05", freq="MS") + pd.DateOffset(days=14),
         ),
         ("lat", lats),
         ("lon", lons),
@@ -73,7 +73,7 @@ pred_data_val = pred_data.copy()
 #%%
 
 pred_groups = pred_data.groupby("time.month").groups
-new_pred = predictors.loc[1980:2015].copy()
+new_pred = predictors.loc[1981:2015].copy()
 new_pred["const"] = 1
 
 #%%
