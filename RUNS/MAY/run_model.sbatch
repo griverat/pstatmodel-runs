@@ -28,3 +28,4 @@ echo -e "
 
 python run_model.py
 python post_run.py
+python make_forecast.py
