@@ -109,8 +109,6 @@ metric2_data = metric2_data.dropna(dim="month", how="all")
 nvar_data = nvar_data.dropna(dim="month", how="all")
 
 #%%
-
-#%%
 full_model_val = {}
 for val_year in range(1982, 2017):
     try:
@@ -123,6 +121,7 @@ for val_year in range(1982, 2017):
     except:
         print(f"Couldn't find model for val year {val_year}", flush=True)
 
+#%%
 for year, validation_model in full_model_val.items():
     print(f"\nStarting computation for year {year}", flush=True)
     for mnum, nmodel in validation_model.items():
