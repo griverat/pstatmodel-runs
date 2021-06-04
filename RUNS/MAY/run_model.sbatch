@@ -26,7 +26,6 @@ echo -e "
     -----------------------------------------------------------------
     "
 
-python create_database.py
 python run_model.py
 python post_run.py
 python make_forecast.py
