@@ -1,4 +1,6 @@
 #%%
+import argparse
+import os
 import pickle
 
 import pandas as pd
@@ -9,6 +11,27 @@ from dask.distributed import Client
 from dask_jobqueue import SLURMCluster
 from pstatmodel.stepwise import base
 
+import utils
+
+#%%
+parser = argparse.ArgumentParser(description="Run the pstatmodel")
+parser.add_argument("settings", type=str)
+args = parser.parse_args()
+
+settings = args["settings"]
+settings = utils.load_settings(settings)
+
+#%%
+MONTH = settings["MONTH"]
+DATA_DIR = settings["DATA_DIR"]
+MONTH_DIR = os.path.join(DATA_DIR, MONTH)
+VALIDATION_DIR = os.path.join(MONTH_DIR, "validation")
+
+utils.check_folder(MONTH)
+utils.check_folder(DATA_DIR)
+utils.check_folder(MONTH_DIR)
+utils.check_folder(VALIDATION_DIR)
+
 #%%
 cluster = SLURMCluster()
 cluster.scale(jobs=8)
@@ -17,9 +40,11 @@ client = Client(cluster)
 print(client, flush=True)
 
 #%%
-predictors = pd.read_excel("Predictores_IniMay.xlsx", index_col=[0])
+predictors = pd.read_excel(
+    os.path.join(settings["MODEL_SRC"], settings["PREDICTORS"]), index_col=[0]
+)
 pisco = (
-    xr.open_dataset("/data/users/grivera/PISCOPrecv2p1.nc", decode_times=False)
+    xr.open_dataset(settings["PISCO_DATA"], decode_times=False)
     .rename({"X": "lon", "Y": "lat", "T": "time"})
     .load()
 )
@@ -72,7 +97,7 @@ for mnum, mmodel in full_model.items():
     print(f"Done computing month number: {mnum}", flush=True)
     print("Starting save", flush=True)
     with open(
-        f"/data/users/grivera/pstatmodel_data/RUNS/MAY/model_may.{mnum:02d}.pickle",
+        os.path.join(DATA_DIR, f"model_{settings['MONTH'].lower()}.{mnum:02d}.pickle"),
         "wb",
     ) as handle:
         pickle.dump(res[0], handle, protocol=pickle.HIGHEST_PROTOCOL)
@@ -89,7 +114,9 @@ full_model = {}
 for mnum, mindex in months_index.items():
     try:
         with open(
-            f"/data/users/grivera/pstatmodel_data/RUNS/MAY/model_may.{mnum:02d}.pickle",
+            os.path.join(
+                DATA_DIR, f"model_{settings['MONTH'].lower()}.{mnum:02d}.pickle"
+            ),
             "rb",
         ) as handle:
             full_model[mnum] = pickle.load(handle)
@@ -146,7 +173,7 @@ for val_year in range(1982, 2017):
 for year_val_save, model_val_save in full_model_val.items():
     print(f"\nStarting save of validation year: {year_val_save}", flush=True)
     with open(
-        f"/data/users/grivera/pstatmodel_data/RUNS/MAY/validation/full_model_val.{year_val_save}.pickle",
+        os.path.join(VALIDATION_DIR, f"full_model_val.{year_val_save}.pickle"),
         "wb",
     ) as handle:
         pickle.dump(model_val_save, handle, protocol=pickle.HIGHEST_PROTOCOL)
