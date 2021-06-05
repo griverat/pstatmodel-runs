@@ -1,14 +1,38 @@
 #%%
+import argparse
+import os
 import pickle
 
 import numpy as np
 import pandas as pd
 import xarray as xr
+from dmelon import utils
 
 #%%
-predictors = pd.read_excel("Predictores_IniMay.xlsx", index_col=[0])
+parser = argparse.ArgumentParser(description="Compute model output")
+parser.add_argument("settings", type=str)
+args = parser.parse_args()
+
+settings = args["settings"]
+settings = utils.load_json(settings)
+
+#%%
+MONTH = settings["MONTH"]
+DATA_DIR = settings["DATA_DIR"]
+MONTH_DIR = os.path.join(DATA_DIR, MONTH)
+VALIDATION_DIR = os.path.join(MONTH_DIR, "validation")
+NC_DIR = os.path.join(MONTH_DIR, "Data")
+
+utils.check_folder(VALIDATION_DIR)
+utils.check_folder(NC_DIR)
+
+
+#%%
+predictors = pd.read_excel(
+    os.path.join(settings["MODEL_SRC"], settings["PREDICTORS"]), index_col=[0]
+)
 pisco = (
-    xr.open_dataset("/data/users/grivera/PISCOPrecv2p1.nc", decode_times=False)
+    xr.open_dataset(settings["PISCO_DATA"], decode_times=False)
     .rename({"X": "lon", "Y": "lat", "T": "time"})
     .load()
 )
@@ -23,7 +47,7 @@ full_model = {}
 for mnum, mindex in months_index.items():
     try:
         with open(
-            f"/data/users/grivera/pstatmodel_data/RUNS/MAY/model_may.{mnum:02d}.pickle",
+            os.path.join(MONTH_DIR, f"model_{MONTH.lower()}.{mnum:02d}.pickle"),
             "rb",
         ) as handle:
             full_model[mnum] = pickle.load(handle)
@@ -113,7 +137,7 @@ full_model_val = {}
 for val_year in range(1982, 2017):
     try:
         with open(
-            f"/data/users/grivera/pstatmodel_data/RUNS/MAY/validation/full_model_val.{val_year}.pickle",
+            os.path.join(VALIDATION_DIR, f"full_model_val.{val_year}.pickle"),
             "rb",
         ) as handle:
             full_model_val[val_year] = pickle.load(handle)
@@ -153,33 +177,23 @@ pred_data_val = pred_data_val.dropna(dim="time", how="all")
 
 #%%
 pred_data.name = "pred_data"
-pred_data.to_netcdf("/data/users/grivera/pstatmodel_data/RUNS/MAY/Data/pred_data.nc")
+pred_data.to_netcdf(os.path.join(NC_DIR, "pred_data.nc"))
 
 metric_data.name = "metric_data"
-metric_data.to_netcdf(
-    "/data/users/grivera/pstatmodel_data/RUNS/MAY/Data/metric_data.nc"
-)
+metric_data.to_netcdf(os.path.join(NC_DIR, "metric_data.nc"))
 
 metric2_data.name = "metric2_data"
-metric2_data.to_netcdf(
-    "/data/users/grivera/pstatmodel_data/RUNS/MAY/Data/metric2_data.nc"
-)
+metric2_data.to_netcdf(os.path.join(NC_DIR, "metric2_data.nc"))
 
 nvar_data.name = "nvar_data"
-nvar_data.to_netcdf("/data/users/grivera/pstatmodel_data/RUNS/MAY/Data/nvar_data.nc")
+nvar_data.to_netcdf(os.path.join(NC_DIR, "nvar_data.nc"))
 
 pred_data_val.name = "pred_data_val"
-pred_data_val.to_netcdf(
-    "/data/users/grivera/pstatmodel_data/RUNS/MAY/Data/pred_data_val.nc"
-)
+pred_data_val.to_netcdf(os.path.join(NC_DIR, "pred_data_val.nc"))
 
 thresh_data.name = "thresh_data"
-thresh_data.to_netcdf(
-    "/data/users/grivera/pstatmodel_data/RUNS/MAY/Data/thresh_data.nc"
-)
+thresh_data.to_netcdf(os.path.join(NC_DIR, "thresh_data.nc"))
 
 model_data.name = "model_data"
-with open(
-    "/data/users/grivera/pstatmodel_data/RUNS/MAY/Data/model_data.pickle", "wb"
-) as handle:
+with open(os.path.join(NC_DIR, "model_data.pickle"), "wb") as handle:
     pickle.dump(model_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
