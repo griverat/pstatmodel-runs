@@ -27,7 +27,6 @@ MONTH_DIR = os.path.join(DATA_DIR, MONTH)
 VALIDATION_DIR = os.path.join(MONTH_DIR, "validation")
 
 utils.check_folder(MONTH)
-utils.check_folder(DATA_DIR)
 utils.check_folder(MONTH_DIR)
 utils.check_folder(VALIDATION_DIR)
 
