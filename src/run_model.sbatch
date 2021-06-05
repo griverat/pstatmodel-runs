@@ -6,6 +6,8 @@
 #SBATCH --job-name modelMAY
 #SBATCH --output modelrun-log-%J.txt
 
+source ~/miniconda3/etc/profile.d/conda.sh
+
 conda activate pangeo
 
 ipnip=$(hostname -i)
