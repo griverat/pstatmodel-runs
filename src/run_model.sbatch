@@ -26,6 +26,6 @@ echo -e "
     -----------------------------------------------------------------
     "
 
-python run_model.py
-python post_run.py
-python make_forecast.py
+python run_model.py $SETTINGS_PATH
+python post_run.py $SETTINGS_PATH
+python make_forecast.py $SETTINGS_PATH
