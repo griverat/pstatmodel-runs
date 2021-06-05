@@ -9,9 +9,8 @@ import xarray as xr
 from dask import compute, delayed
 from dask.distributed import Client
 from dask_jobqueue import SLURMCluster
+from dmelon import utils
 from pstatmodel.stepwise import base
-
-import utils
 
 #%%
 parser = argparse.ArgumentParser(description="Run the pstatmodel")
@@ -19,7 +18,7 @@ parser.add_argument("settings", type=str)
 args = parser.parse_args()
 
 settings = args["settings"]
-settings = utils.load_settings(settings)
+settings = utils.load_json(settings)
 
 #%%
 MONTH = settings["MONTH"]
