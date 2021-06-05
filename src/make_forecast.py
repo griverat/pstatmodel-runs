@@ -1,15 +1,35 @@
 #%%
+import argparse
+import os
 import pickle
 
 import numpy as np
 import pandas as pd
 import xarray as xr
+from dmelon import utils
 
 #%%
-predictors = pd.read_excel("Predictores_IniMay.xlsx", index_col=[0])
+parser = argparse.ArgumentParser(description="Compute model output")
+parser.add_argument("settings", type=str)
+args = parser.parse_args()
+
+settings = args["settings"]
+settings = utils.load_json(settings)
+
+#%%
+MONTH = settings["MONTH"]
+DATA_DIR = settings["DATA_DIR"]
+MONTH_DIR = os.path.join(DATA_DIR, MONTH)
+NC_DIR = os.path.join(MONTH_DIR, "Data")
+
+utils.check_folder(NC_DIR)
+#%%
+predictors = pd.read_excel(
+    os.path.join(settings["MODEL_SRC"], settings["PREDICTORS"]), index_col=[0]
+)
 
 pisco = (
-    xr.open_dataset("/data/users/grivera/PISCOPrecv2p1.nc", decode_times=False)
+    xr.open_dataset(settings["PISCO_DATA"], decode_times=False)
     .rename({"X": "lon", "Y": "lat", "T": "time"})
     .load()
 )
@@ -24,7 +44,7 @@ full_model = {}
 for mnum, mindex in months_index.items():
     try:
         with open(
-            f"/data/users/grivera/pstatmodel_data/RUNS/MAY/model_may.{mnum:02d}.pickle",
+            os.path.join(MONTH_DIR, f"model_{MONTH.lower()}.{mnum:02d}.pickle"),
             "rb",
         ) as handle:
             full_model[mnum] = pickle.load(handle)
@@ -72,4 +92,4 @@ for mnum, nmodel in full_model.items():
 fcst_data = fcst_data.dropna(dim="time", how="all")
 
 fcst_data.name = "fcst_data"
-fcst_data.to_netcdf("/data/users/grivera/pstatmodel_data/RUNS/MAY/Data/fcst_data.nc")
+fcst_data.to_netcdf(os.path.join(NC_DIR, "fcst_data.nc"))
