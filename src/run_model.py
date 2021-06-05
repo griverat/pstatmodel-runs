@@ -95,7 +95,7 @@ for mnum, mmodel in full_model.items():
     print(f"Done computing month number: {mnum}", flush=True)
     print("Starting save", flush=True)
     with open(
-        os.path.join(DATA_DIR, f"model_{settings['MONTH'].lower()}.{mnum:02d}.pickle"),
+        os.path.join(MONTH_DIR, f"model_{settings['MONTH'].lower()}.{mnum:02d}.pickle"),
         "wb",
     ) as handle:
         pickle.dump(res[0], handle, protocol=pickle.HIGHEST_PROTOCOL)
@@ -113,7 +113,7 @@ for mnum, mindex in months_index.items():
     try:
         with open(
             os.path.join(
-                DATA_DIR, f"model_{settings['MONTH'].lower()}.{mnum:02d}.pickle"
+                MONTH_DIR, f"model_{settings['MONTH'].lower()}.{mnum:02d}.pickle"
             ),
             "rb",
         ) as handle:
