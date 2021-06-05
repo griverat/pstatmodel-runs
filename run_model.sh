@@ -4,7 +4,7 @@ source ~/miniconda3/etc/profile.d/conda.sh
 
 conda activate pangeo
 
-MONTH_DIR="/home/grivera/GitLab/pstatmodel-runs/RUNS/MAY"
+MONTH_DIR="/home/grivera/GitLab/pstatmodel-runs/RUNS/SEP"
 SETTINGS_PATH="$MONTH_DIR/settings.json"
 
 BASE_DIR=$(pwd)
