@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description="Run the pstatmodel")
 parser.add_argument("settings", type=str)
 args = parser.parse_args()
 
-settings = args["settings"]
+settings = args.settings
 settings = utils.load_json(settings)
 
 #%%

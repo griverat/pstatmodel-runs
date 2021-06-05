@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser(description="Compute model output")
 parser.add_argument("settings", type=str)
 args = parser.parse_args()
 
-settings = args["settings"]
+settings = args.settings
 settings = utils.load_json(settings)
 
 #%%
