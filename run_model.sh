@@ -13,4 +13,4 @@ cd "$MONTH_DIR"
 python create_database.py $SETTINGS_PATH
 
 cd "$BASE_DIR/src"
-sbatch --export=SETTINGS_PATH --output=$MONTH_DIR/modelrun-log.txt --job-name="MODEL_SEP" run_model.sbatch
+sbatch --export=ALL,SETTINGS_PATH=$SETTINGS_PATH --output=$MONTH_DIR/modelrun-log.txt --job-name="modelSEP" run_model.sbatch
