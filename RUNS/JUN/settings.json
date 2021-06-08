@@ -1,0 +1,7 @@
+{
+    "MONTH": "JUN",
+    "DATA_DIR": "/data/users/grivera/pstatmodel_data/RUNS",
+    "PISCO_DATA": "/data/users/grivera/PISCOPrecv2p1.nc",
+    "MODEL_SRC": "/home/grivera/GitLab/pstatmodel-runs/RUNS/JUN",
+    "PREDICTORS": "Predictores_IniJun.xlsx"
+}
