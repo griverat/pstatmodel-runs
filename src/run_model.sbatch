@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH --partition mpi_long1
+#SBATCH --partition mpi_long2
 #SBATCH --ntasks 1
 #SBATCH --time 5-00:00:00
 #SBATCH --mem-per-cpu 120000
@@ -32,4 +32,5 @@ echo "Using settings from :" $SETTINGS_PATH
 
 python run_model.py $SETTINGS_PATH
 python post_run.py $SETTINGS_PATH
+python run_test.py $SETTINGS_PATH
 python make_forecast.py $SETTINGS_PATH
