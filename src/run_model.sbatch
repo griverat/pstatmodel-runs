@@ -33,4 +33,3 @@ echo "Using settings from :" $SETTINGS_PATH
 python run_model.py $SETTINGS_PATH
 python post_run.py $SETTINGS_PATH
 python run_test.py $SETTINGS_PATH
-python make_forecast.py $SETTINGS_PATH
