@@ -15,3 +15,6 @@ python create_database.py $SETTINGS_PATH
 
 cd "$BASE_DIR/src"
 sbatch --export=ALL,SETTINGS_PATH=$SETTINGS_PATH --output=$MONTH_DIR/modelrun-log.txt --job-name="model$MONTH" run_model.sbatch
+
+cd "$BASE_DIR"
+papermill notebooks/plotting_template.ipynb $MONTH_DIR/plotting_$MONTH.ipynb $SETTINGS_PATH
