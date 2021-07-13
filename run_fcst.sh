@@ -15,3 +15,6 @@ python create_database.py $SETTINGS_PATH
 
 cd "$BASE_DIR/src"
 sbatch --export=ALL,SETTINGS_PATH=$SETTINGS_PATH --output=$MONTH_DIR/fcstrun-log.txt --job-name="fcst$MONTH" run_fcst.sbatch
+
+cd "$BASE_DIR"
+papermill notebooks/fcst_plot_template.ipynb $MONTH_DIR/fcst_plot_$MONTH.ipynb -p settings $SETTINGS_PATH
