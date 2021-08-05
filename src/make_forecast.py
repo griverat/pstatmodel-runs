@@ -53,8 +53,8 @@ for mnum, mindex in months_index.items():
         print(f"Couldn't find model for month number {mnum}", flush=True)
 
 #%%
-lats = pisco.lat
-lons = pisco.lon
+lats = pisco.lat.data
+lons = pisco.lon.data
 
 fcst_data = xr.DataArray(
     np.nan,

@@ -122,8 +122,8 @@ for mnum, mindex in months_index.items():
 
 #%%
 
-lats = pisco.lat
-lons = pisco.lon
+lats = pisco.lat.data
+lons = pisco.lon.data
 
 pred_data = xr.DataArray(
     np.nan,
