@@ -23,7 +23,7 @@ settings = utils.load_json(settings)
 #%%
 MONTH = settings["MONTH"]
 DATA_DIR = settings["DATA_DIR"]
-MONTH_DIR = os.path.join(DATA_DIR, MONTH)
+MONTH_DIR = os.path.join(DATA_DIR, f"{settings['INIT_MONTH']}.{MONTH}")
 NC_TESTS_DIR = os.path.join(MONTH_DIR, "tests")
 
 utils.check_folder(NC_TESTS_DIR)
