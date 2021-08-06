@@ -2,4 +2,5 @@
 *log*.txt
 .vscode
 __pycache__
+*.xlsx
 RUNS/**/*.ipynb
