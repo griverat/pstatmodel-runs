@@ -2,5 +2,4 @@
 *log*.txt
 .vscode
 __pycache__
-Predictores*.xlsx
 RUNS/**/*.ipynb
