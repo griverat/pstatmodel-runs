@@ -4,7 +4,8 @@ source ~/miniconda3/etc/profile.d/conda.sh
 
 conda activate pangeo
 
-MONTH="JUL"
+DATE="2021/05"
+MONTH=$(date -d $DATE/01 +%Y/%m.%^b)
 MONTH_DIR="/home/grivera/GitLab/pstatmodel-runs/RUNS/$MONTH"
 SETTINGS_PATH="$MONTH_DIR/settings.json"
 
@@ -12,9 +13,7 @@ BASE_DIR=$(pwd)
 
 cd "$BASE_DIR/src"
 python create_database.py $SETTINGS_PATH
-
-cd "$BASE_DIR/src"
-sbatch -W --export=ALL,SETTINGS_PATH=$SETTINGS_PATH --output=$MONTH_DIR/modelrun-log.txt --job-name="model$MONTH" run_model.sbatch
+sbatch -W --export=ALL,SETTINGS_PATH=$SETTINGS_PATH --output=$MONTH_DIR/modelrun-log.txt --job-name="p$MONTH" run_model.sbatch
 
 wait
 
