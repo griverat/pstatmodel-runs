@@ -10,7 +10,7 @@ SETTINGS_PATH="$MONTH_DIR/settings.json"
 
 BASE_DIR=$(pwd)
 
-cd "$MONTH_DIR"
+cd "$BASE_DIR/src"
 python create_database.py $SETTINGS_PATH
 
 cd "$BASE_DIR/src"
