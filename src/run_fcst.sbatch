@@ -9,4 +9,6 @@
 source ~/miniconda3/etc/profile.d/conda.sh
 
 conda activate pangeo
+
+echo -e "\n\nRunning: make_forecast.py $SETTINGS_PATH\n"
 python make_forecast.py $SETTINGS_PATH
