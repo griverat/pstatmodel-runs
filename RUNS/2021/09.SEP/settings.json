@@ -1,0 +1,9 @@
+{
+    "MONTH": "SEP",
+    "INIT_MONTH": "09",
+    "FYEAR": 2022,
+    "DATA_DIR": "/data/users/grivera/pstatmodel_data/RUNS/2021",
+    "PISCO_DATA": "/data/users/grivera/PISCOPrecv2p1.nc",
+    "MODEL_SRC": "/home/grivera/GitLab/pstatmodel-runs/RUNS/2021/09.SEP",
+    "PREDICTORS": "Predictores_IniSep.xlsx"
+}
