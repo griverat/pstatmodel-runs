@@ -4,7 +4,7 @@ source ~/miniconda3/etc/profile.d/conda.sh
 
 conda activate pangeo
 
-DATE="2021/10"
+DATE="2021/11"
 MONTH=$(date -d $DATE/01 +%Y.%m)
 MONTH_PATH=$(date -d $DATE/01 +%Y/%m.%^b)
 MONTH_DIR="/home/grivera/GitLab/pstatmodel-runs/RUNS/$MONTH_PATH"
