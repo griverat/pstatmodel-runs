@@ -30,7 +30,7 @@ utils.check_folder(NC_TESTS_DIR)
 
 #%%
 cluster = SLURMCluster()
-cluster.scale(jobs=8)
+cluster.scale(jobs=4)
 print(cluster, flush=True)
 client = Client(cluster)
 print(client, flush=True)
@@ -46,7 +46,7 @@ pisco = (
 )
 pisco.time.attrs["calendar"] = "360_day"
 pisco = xr.decode_cf(pisco).Prec
-pisco = pisco.sel(time=slice("1981-10-01", "2016-05-01"))
+pisco = pisco.sel(time=slice("1981-10-01", "2016-10-01"))
 
 #%%
 sel_db = predictors.loc[1981:2015].copy()
@@ -130,7 +130,7 @@ pred_data = xr.DataArray(
     coords=[
         (
             "time",
-            pd.date_range("1981-10", "2016-05", freq="MS") + pd.DateOffset(days=14),
+            pd.date_range("1981-10", "2016-09", freq="MS") + pd.DateOffset(days=14),
         ),
         ("lat", lats),
         ("lon", lons),

@@ -37,7 +37,7 @@ pisco = (
 )
 pisco.time.attrs["calendar"] = "360_day"
 pisco = xr.decode_cf(pisco).Prec
-pisco = pisco.sel(time=slice("1981-10-01", "2016-05-01"))
+pisco = pisco.sel(time=slice("1981-10-01", "2016-10-01"))
 
 months_index = pisco.groupby("time.month").groups
 
@@ -63,7 +63,7 @@ fcst_data = xr.DataArray(
     coords=[
         (
             "time",
-            pd.date_range("1981-10", "2022-05", freq="MS") + pd.DateOffset(days=14),
+            pd.date_range("1981-10", "2022-09", freq="MS") + pd.DateOffset(days=14),
         ),
         ("lat", lats),
         ("lon", lons),
