@@ -1,4 +1,3 @@
-#%%
 import argparse
 import os
 import pickle
@@ -8,7 +7,6 @@ import pandas as pd
 import xarray as xr
 from dmelon import utils
 
-#%%
 parser = argparse.ArgumentParser(description="Compute model output")
 parser.add_argument("settings", type=str)
 args = parser.parse_args()
@@ -16,7 +14,6 @@ args = parser.parse_args()
 settings = args.settings
 settings = utils.load_json(settings)
 
-#%%
 MONTH = settings["MONTH"]
 DATA_DIR = settings["DATA_DIR"]
 MONTH_DIR = os.path.join(DATA_DIR, f"{settings['INIT_MONTH']}.{MONTH}")
@@ -25,7 +22,6 @@ NC_DIR = os.path.join(
 )
 
 utils.check_folder(NC_DIR)
-#%%
 predictors = pd.read_excel(
     os.path.join(settings["MODEL_SRC"], settings["PREDICTORS"]), index_col=[0]
 )
@@ -41,7 +37,6 @@ pisco = pisco.sel(time=slice("1981-10-01", "2016-10-01"))
 
 months_index = pisco.groupby("time.month").groups
 
-#%%
 full_model = {}
 for mnum, mindex in months_index.items():
     try:
@@ -54,7 +49,6 @@ for mnum, mindex in months_index.items():
     except:
         print(f"Couldn't find model for month number {mnum}", flush=True)
 
-#%%
 lats = pisco.lat.data
 lons = pisco.lon.data
 
@@ -70,13 +64,9 @@ fcst_data = xr.DataArray(
     ],
 )
 
-#%%
-
 pred_groups = fcst_data.groupby("time.month").groups
 new_pred = predictors.loc[1981:].copy()
 new_pred["const"] = 1
-
-#%%
 
 for mnum, nmodel in full_model.items():
 
@@ -90,7 +80,6 @@ for mnum, nmodel in full_model.items():
             )
     print(f"Finished model month number: {mnum}\n")
 
-#%%
 fcst_data = fcst_data.dropna(dim="time", how="all")
 
 fcst_data.name = "fcst_data"

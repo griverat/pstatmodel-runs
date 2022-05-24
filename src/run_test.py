@@ -1,4 +1,3 @@
-#%%
 import argparse
 import os
 import pickle
@@ -12,7 +11,6 @@ from dask_jobqueue import SLURMCluster
 from dmelon import utils
 from pstatmodel.stepwise import base
 
-#%%
 parser = argparse.ArgumentParser(description="Run the pstatmodel")
 parser.add_argument("settings", type=str)
 args = parser.parse_args()
@@ -20,7 +18,6 @@ args = parser.parse_args()
 settings = args.settings
 settings = utils.load_json(settings)
 
-#%%
 MONTH = settings["MONTH"]
 DATA_DIR = settings["DATA_DIR"]
 MONTH_DIR = os.path.join(DATA_DIR, f"{settings['INIT_MONTH']}.{MONTH}")
@@ -28,14 +25,12 @@ NC_TESTS_DIR = os.path.join(MONTH_DIR, "tests")
 
 utils.check_folder(NC_TESTS_DIR)
 
-#%%
 cluster = SLURMCluster()
 cluster.scale(jobs=4)
 print(cluster, flush=True)
 client = Client(cluster)
 print(client, flush=True)
 
-#%%
 predictors = pd.read_excel(
     os.path.join(settings["MODEL_SRC"], settings["PREDICTORS"]), index_col=[0]
 )
@@ -48,11 +43,9 @@ pisco.time.attrs["calendar"] = "360_day"
 pisco = xr.decode_cf(pisco).Prec
 pisco = pisco.sel(time=slice("1981-10-01", "2016-10-01"))
 
-#%%
 sel_db = predictors.loc[1981:2015].copy()
 months_index = pisco.groupby("time.month").groups
 
-#%%
 
 stepwise_selection = delayed(base.stepwise_selection)
 
@@ -61,8 +54,6 @@ full_model = {}
 sel_db_model = sel_db.reset_index(drop=True)
 
 for mnum, mindex in months_index.items():
-    if mnum in [5, 6, 7, 8, 9]:
-        continue
     full_model[mnum] = [
         (
             (lat, lon),
@@ -85,8 +76,6 @@ for mnum, mindex in months_index.items():
 
     print(f"Month number {mnum} ready for computation\n", flush=True)
 
-#%%
-
 for mnum, mmodel in full_model.items():
     print(f"\nStarting computation of month number: {mnum}", flush=True)
     res = compute(mmodel)
@@ -99,13 +88,11 @@ for mnum, mmodel in full_model.items():
         pickle.dump(res[0], handle, protocol=pickle.HIGHEST_PROTOCOL)
     print(f"Saving done for month number: {mnum}\n", flush=True)
 
-#%%
 # Scale down and close cluster
 client.close()
 cluster.scale(jobs=0)
 cluster.close()
 
-#%%
 full_model = {}
 for mnum, mindex in months_index.items():
     try:
@@ -119,8 +106,6 @@ for mnum, mindex in months_index.items():
         print(f"Succesfully read model for month number {mnum}", flush=True)
     except:
         print(f"Couldn't find model for month number {mnum}", flush=True)
-
-#%%
 
 lats = pisco.lat.data
 lons = pisco.lon.data
@@ -159,13 +144,9 @@ thresh_data = metric_data.copy()
 
 pred_data_val = pred_data.copy()
 
-#%%
-
 pred_groups = pred_data.groupby("time.month").groups
 new_pred = predictors.loc[1981:2015].copy()
 new_pred["const"] = 1
-
-#%%
 
 for mnum, nmodel in full_model.items():
 
@@ -173,7 +154,6 @@ for mnum, nmodel in full_model.items():
 
     for (lat, lon), (pixel_vars, pixel_model, thresh_in) in nmodel:
         if not isinstance(pixel_model, float) and len(pixel_vars) != 0:
-            #             pixel_model, thresh_in = pixel_model
             sel_time = pred_data.time.isel(time=pred_groups[mnum]).data
             pred_data.loc[dict(lat=lat, lon=lon, time=sel_time)] = pixel_model.predict(
                 new_pred[pixel_model.params.index]
@@ -190,13 +170,11 @@ for mnum, nmodel in full_model.items():
 
     print(f"Finished model month number: {mnum}\n")
 
-#%%
 pred_data = pred_data.dropna(dim="time", how="all")
 metric_data = metric_data.dropna(dim="month", how="all")
 metric2_data = metric2_data.dropna(dim="month", how="all")
 nvar_data = nvar_data.dropna(dim="month", how="all")
 
-#%%
 pred_data.name = "pred_data"
 pred_data.to_netcdf(os.path.join(NC_TESTS_DIR, "pred_data.nc"))
 
