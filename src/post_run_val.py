@@ -4,8 +4,9 @@ import pickle
 
 import numpy as np
 import pandas as pd
-import xarray as xr
 from dmelon import utils
+
+import xarray as xr
 
 parser = argparse.ArgumentParser(description="Compute model output")
 parser.add_argument("settings", type=str)
@@ -83,7 +84,7 @@ for val_year in range(1982, 2017):
             print(f"Done month number {mnum}", flush=True)
         print(f"Done computation for validation year {val_year}", flush=True)
 
-    except:
+    except FileNotFoundError:
         print(f"Couldn't find model for val year {val_year}", flush=True)
 
 

@@ -3,13 +3,13 @@ import os
 import pickle
 
 import pandas as pd
-import statsmodels.api as sm
-import xarray as xr
 from dask import compute, delayed
 from dask.distributed import Client
 from dask_jobqueue import SLURMCluster
 from dmelon import utils
 from pstatmodel.stepwise import base
+
+import xarray as xr
 
 parser = argparse.ArgumentParser(description="Run the pstatmodel")
 parser.add_argument("settings", type=str)

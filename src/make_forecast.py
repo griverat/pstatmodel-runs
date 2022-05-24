@@ -4,8 +4,9 @@ import pickle
 
 import numpy as np
 import pandas as pd
-import xarray as xr
 from dmelon import utils
+
+import xarray as xr
 
 parser = argparse.ArgumentParser(description="Compute model output")
 parser.add_argument("settings", type=str)
@@ -46,7 +47,7 @@ for mnum, mindex in months_index.items():
         ) as handle:
             full_model[mnum] = pickle.load(handle)
         print(f"Succesfully read model for month number {mnum}", flush=True)
-    except:
+    except FileNotFoundError:
         print(f"Couldn't find model for month number {mnum}", flush=True)
 
 lats = pisco.lat.data

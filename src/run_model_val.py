@@ -4,8 +4,9 @@ import pickle
 
 import pandas as pd
 import statsmodels.api as sm
-import xarray as xr
 from dmelon import utils
+
+import xarray as xr
 
 parser = argparse.ArgumentParser(
     description="Run the pstatmodel validaton configuration"
@@ -40,7 +41,6 @@ months_index = pisco.groupby("time.month").groups
 
 sel_db_model = sel_db.reset_index(drop=True)
 
-#%%
 full_model = {}
 for mnum, mindex in months_index.items():
     try:
@@ -50,10 +50,9 @@ for mnum, mindex in months_index.items():
         ) as handle:
             full_model[mnum] = pickle.load(handle)
         print(f"Succesfully read model for month number {mnum}", flush=True)
-    except:
+    except FileNotFoundError:
         print(f"Couldn't find model for month number {mnum}", flush=True)
 
-#%%
 # Validation model container
 sel_db.loc[:, "const"] = 1
 
