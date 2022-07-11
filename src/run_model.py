@@ -1,6 +1,8 @@
 import argparse
+import logging
 import os
 import pickle
+import sys
 
 import pandas as pd
 from dask import compute, delayed
@@ -10,6 +12,14 @@ from dmelon import utils
 from pstatmodel.stepwise import base
 
 import xarray as xr
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)],
+)
+
+logger = logging.getLogger(__name__)
 
 parser = argparse.ArgumentParser(description="Run the pstatmodel")
 parser.add_argument("settings", type=str)
@@ -26,9 +36,9 @@ utils.check_folder(MONTH_DIR)
 
 cluster = SLURMCluster()
 cluster.scale(jobs=8)
-print(cluster, flush=True)
+logger.info(cluster)
 client = Client(cluster)
-print(client, flush=True)
+logger.info(client)
 
 predictors = pd.read_excel(
     os.path.join(settings["MODEL_SRC"], settings["PREDICTORS"]), index_col=[0]
@@ -74,20 +84,20 @@ for mnum, mindex in months_index.items():
         for lon in pisco.lon.data
     ]
 
-    print(f"Month number {mnum} ready for computation\n", flush=True)
+    logger.info(f"Month number {mnum} ready for computation\n")
 
 
 for mnum, mmodel in full_model.items():
-    print(f"\nStarting computation of month number: {mnum}", flush=True)
+    logger.info(f"Starting computation of month number: {mnum}")
     res = compute(mmodel)
-    print(f"Done computing month number: {mnum}", flush=True)
-    print("Starting save", flush=True)
+    logger.info(f"Done computing month number: {mnum}")
+    logger.info("Starting save")
     with open(
         os.path.join(MONTH_DIR, f"model_{MONTH.lower()}.{mnum:02d}.pickle"),
         "wb",
     ) as handle:
         pickle.dump(res[0], handle, protocol=pickle.HIGHEST_PROTOCOL)
-    print(f"Saving done for month number: {mnum}\n", flush=True)
+    logger.info(f"Saving done for month number: {mnum}\n")
 
 # Scale down and close cluster
 client.close()
