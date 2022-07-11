@@ -61,29 +61,32 @@ stepwise_selection = delayed(base.stepwise_selection)
 
 full_model = {}
 
-sel_db_model = sel_db.reset_index(drop=True)
+sel_db_model = delayed(sel_db.reset_index(drop=True))
 
 for mnum, mindex in months_index.items():
-    print(mnum, flush=True)
-    full_model[mnum] = [
-        (
-            (lat, lon),
-            stepwise_selection(
-                sel_db_model,
-                pisco.isel(time=mindex)
-                .sel(lat=lat, lon=lon)
+    logger.info(f"Building month {mnum} futures")
+
+    _pisco_sel = pisco.isel(time=mindex)
+    full_model[mnum] = []
+    for lat in pisco.lat.data:
+        _pisco_sel_lat = _pisco_sel.sel(lat=lat)
+        for lon in pisco.lon.data:
+            _pisco_sel_lat_lon = delayed(
+                _pisco_sel_lat.sel(lon=lon)
                 .to_dataframe()
-                .reset_index(drop=True)["Prec"],
-                threshold_in=0.05,
-                threshold_out=0.1,
-                max_vars=12,
-                min_vars=4,
-                verbose=False,
-            ),
-        )
-        for lat in pisco.lat.data
-        for lon in pisco.lon.data
-    ]
+                .reset_index(drop=True)["Prec"]
+            )
+            full_model[mnum].append(
+                stepwise_selection(
+                    sel_db_model,
+                    _pisco_sel_lat_lon,
+                    threshold_in=0.05,
+                    threshold_out=0.1,
+                    max_vars=12,
+                    min_vars=4,
+                    verbose=False,
+                )
+            )
 
     logger.info(f"Month number {mnum} ready for computation\n")
 
