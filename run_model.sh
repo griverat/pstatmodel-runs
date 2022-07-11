@@ -14,7 +14,7 @@ BASE_DIR=$(pwd)
 
 cd "$BASE_DIR/src"
 python create_database.py $SETTINGS_PATH
-sbatch -W --export=ALL,SETTINGS_PATH=$SETTINGS_PATH --output=$MONTH_DIR/modelrun-log.txt --job-name="p$MONTH" run_model.sbatch
+sbatch -W --export=ALL,SETTINGS_PATH=$SETTINGS_PATH --output=$MONTH_DIR/modelrun-log_$(date +%Y-%m-%d_%H:%M).txt --job-name="p$MONTH" run_model.sbatch
 
 wait
 
