@@ -29,6 +29,7 @@ settings = args.settings
 settings = utils.load_json(settings)
 
 MONTH = settings["MONTH"]
+MONTH_LIST = settings["MLIST"]
 DATA_DIR = settings["DATA_DIR"]
 MONTH_DIR = os.path.join(DATA_DIR, f"{settings['INIT_MONTH']}.{MONTH}")
 
@@ -54,7 +55,7 @@ pisco = pisco.sel(time=slice("1981-10-01", "2016-10-01"))
 
 sel_db = predictors.loc[1981:2015].copy()
 months_index = pisco.groupby("time.month").groups
-
+months_index = {k: v for k, v in months_index.items() if k in MONTH_LIST}
 
 stepwise_selection = delayed(base.stepwise_selection)
 
