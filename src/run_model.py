@@ -95,11 +95,12 @@ for mnum, mmodel in full_model.items():
     logger.info(f"Starting computation of month number: {mnum}")
     res = compute(mmodel)
     logger.info(f"Done computing month number: {mnum}")
+
     logger.info("Starting save")
-    with open(
-        os.path.join(MONTH_DIR, f"model_{MONTH.lower()}.{mnum:02d}.pickle"),
-        "wb",
-    ) as handle:
+    out_file = os.path.join(MONTH_DIR, f"model_{MONTH.lower()}.{mnum:02d}.pickle")
+    logger.info(f"Output file: {out_file}")
+
+    with open(out_file, "wb") as handle:
         pickle.dump(res[0], handle, protocol=pickle.HIGHEST_PROTOCOL)
     logger.info(f"Saving done for month number: {mnum}\n")
 
