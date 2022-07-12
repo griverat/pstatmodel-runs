@@ -1,12 +1,22 @@
 import argparse
+import logging
 import os
 import pickle
+import sys
 
 import numpy as np
 import pandas as pd
 from dmelon import utils
 
 import xarray as xr
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)],
+)
+
+logger = logging.getLogger(__name__)
 
 parser = argparse.ArgumentParser(description="Compute model output")
 parser.add_argument("settings", type=str)
@@ -47,9 +57,9 @@ for mnum, mindex in months_index.items():
             "rb",
         ) as handle:
             full_model[mnum] = pickle.load(handle)
-        print(f"Succesfully read model for month number {mnum}", flush=True)
+        logger.info(f"Succesfully read model for month number {mnum}")
     except FileNotFoundError:
-        print(f"Couldn't find model for month number {mnum}", flush=True)
+        logger.info(f"Couldn't find model for month number {mnum}")
 
 lats = pisco.lat.data
 lons = pisco.lon.data
@@ -72,7 +82,7 @@ new_pred["const"] = 1
 
 for mnum, nmodel in full_model.items():
 
-    print(f"\nStarting model month number: {mnum}", flush=True)
+    logger.info(f"\nStarting model month number: {mnum}")
 
     for (lat, lon), (pixel_vars, pixel_model, thresh_in) in nmodel:
         if not isinstance(pixel_model, float) and len(pixel_vars) != 0:
@@ -80,9 +90,11 @@ for mnum, nmodel in full_model.items():
             fcst_data.loc[dict(lat=lat, lon=lon, time=sel_time)] = pixel_model.predict(
                 new_pred[pixel_model.params.index]
             )
-    print(f"Finished model month number: {mnum}\n")
+    logger.info(f"Finished model month number: {mnum}\n")
 
 fcst_data = fcst_data.dropna(dim="time", how="all")
 
+logger.info(f"Saving netcdf data to {NC_DIR}")
 fcst_data.name = "fcst_data"
 fcst_data.to_netcdf(os.path.join(NC_DIR, "fcst_data.nc"))
+logger.info("Done")
