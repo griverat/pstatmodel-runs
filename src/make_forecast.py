@@ -16,12 +16,11 @@ settings = args.settings
 settings = utils.load_json(settings)
 
 MONTH = settings["MONTH"]
+FYEAR = settings["FYEAR"]
 MONTH_LIST = settings["MLIST"]
 DATA_DIR = settings["DATA_DIR"]
 MONTH_DIR = os.path.join(DATA_DIR, f"{settings['INIT_MONTH']}.{MONTH}")
-NC_DIR = os.path.join(
-    DATA_DIR, str(settings["FYEAR"]), f"{settings['INIT_MONTH']}.{MONTH}", "Data"
-)
+NC_DIR = os.path.join(DATA_DIR, str(FYEAR), f"{settings['INIT_MONTH']}.{MONTH}", "Data")
 
 utils.check_folder(NC_DIR)
 predictors = pd.read_excel(
@@ -60,7 +59,7 @@ fcst_data = xr.DataArray(
     coords=[
         (
             "time",
-            pd.date_range("1981-10", "2023-09", freq="MS") + pd.DateOffset(days=14),
+            pd.date_range("1981-10", f"{FYEAR}-09", freq="MS") + pd.DateOffset(days=14),
         ),
         ("lat", lats),
         ("lon", lons),
