@@ -16,6 +16,7 @@ settings = args.settings
 settings = utils.load_json(settings)
 
 MONTH = settings["MONTH"]
+MONTH_LIST = settings["MLIST"]
 DATA_DIR = settings["DATA_DIR"]
 MONTH_DIR = os.path.join(DATA_DIR, f"{settings['INIT_MONTH']}.{MONTH}")
 NC_DIR = os.path.join(
@@ -37,6 +38,7 @@ pisco = xr.decode_cf(pisco).Prec
 pisco = pisco.sel(time=slice("1981-10-01", "2016-10-01"))
 
 months_index = pisco.groupby("time.month").groups
+months_index = {k: v for k, v in months_index.items() if k in MONTH_LIST}
 
 full_model = {}
 for mnum, mindex in months_index.items():
@@ -58,7 +60,7 @@ fcst_data = xr.DataArray(
     coords=[
         (
             "time",
-            pd.date_range("1981-10", "2022-09", freq="MS") + pd.DateOffset(days=14),
+            pd.date_range("1981-10", "2023-09", freq="MS") + pd.DateOffset(days=14),
         ),
         ("lat", lats),
         ("lon", lons),
