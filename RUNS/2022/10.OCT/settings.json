@@ -6,5 +6,5 @@
     "PISCO_DATA": "/data/users/grivera/PISCOPrecv2p1.nc",
     "PISCO_DATA_NEW": "/data/users/grivera/PISCO/PISCO_Prec_v2p1_unstable_timefix.nc",
     "MODEL_SRC": "/home/grivera/GitLab/pstatmodel-runs/RUNS/2022/10.OCT",
-    "PREDICTORS": "Predictores_IniOct_std.xlsx"
+    "PREDICTORS": "Predictores_IniOct.xlsx"
 }

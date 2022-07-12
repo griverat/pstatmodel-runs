@@ -1,0 +1,22 @@
+{
+    "MONTH": "SEP",
+    "INIT_MONTH": "09",
+    "FYEAR": 2022,
+    "MLIST": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+    ],
+    "DATA_DIR": "/data/users/grivera/pstatmodel_data/RUNS/",
+    "PISCO_DATA": "/data/users/grivera/PISCOPrecv2p1.nc",
+    "MODEL_SRC": "/home/grivera/GitLab/pstatmodel-runs/RUNS/2022/09.SEP",
+    "PREDICTORS": "Predictores_IniSep.xlsx"
+}
