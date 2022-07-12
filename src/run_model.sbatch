@@ -8,7 +8,7 @@
 
 source ~/miniconda3/etc/profile.d/conda.sh
 
-conda activate pangeo
+conda activate pstatmodel
 
 ipnip=$(hostname -i)
 user='grivera'
@@ -20,7 +20,7 @@ echo -e "
     -----------------------------------------------------------------
     ssh -N -L 8787:$ipnip:8787 $user@$host
     -----------------------------------------------------------------
-    
+
     From outside the network.
     Using an ssh key with host and port details in .ssh/config
     -----------------------------------------------------------------
@@ -29,12 +29,10 @@ echo -e "
     "
 
 echo "Using settings from :" $SETTINGS_PATH
+echo $(cat $SETTINGS_PATH) | python -m json.tool
 
 echo -e "\n\nRunning: run_model.py $SETTINGS_PATH\n"
 python run_model.py $SETTINGS_PATH
 
 echo -e "\n\nRunning: post_run.py $SETTINGS_PATH\n"
 python post_run.py $SETTINGS_PATH
-
-echo -e "\n\nRunning: run_test.py $SETTINGS_PATH\n"
-python run_test.py $SETTINGS_PATH

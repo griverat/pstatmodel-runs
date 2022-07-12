@@ -2,7 +2,7 @@
 
 source ~/miniconda3/etc/profile.d/conda.sh
 
-conda activate pangeo
+conda activate pstatmodel
 
 DATE="2021/05"
 MONTH=$(date -d $DATE/01 +%Y.%m)
