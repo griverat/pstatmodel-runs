@@ -82,7 +82,7 @@ new_pred["const"] = 1
 
 for mnum, nmodel in full_model.items():
 
-    logger.info(f"\nStarting model month number: {mnum}")
+    logger.info(f"Starting model month number: {mnum}")
 
     for (lat, lon), (pixel_vars, pixel_model, thresh_in) in nmodel:
         if not isinstance(pixel_model, float) and len(pixel_vars) != 0:
