@@ -36,7 +36,7 @@ MONTH_DIR = os.path.join(DATA_DIR, f"{settings['INIT_MONTH']}.{MONTH}")
 utils.check_folder(MONTH_DIR)
 
 cluster = SLURMCluster()
-cluster.scale(jobs=8)
+cluster.scale(jobs=16)
 logger.info(cluster)
 client = Client(cluster)
 logger.info(client)
@@ -77,15 +77,18 @@ for mnum, mindex in months_index.items():
                 .reset_index(drop=True)["Prec"]
             )
             full_model[mnum].append(
-                stepwise_selection(
-                    sel_db_model,
-                    _pisco_sel_lat_lon,
-                    threshold_in=0.05,
-                    threshold_out=0.1,
-                    max_vars=12,
-                    min_vars=4,
-                    verbose=False,
-                )
+                (
+                    (lat, lon),
+                    stepwise_selection(
+                        sel_db_model,
+                        _pisco_sel_lat_lon,
+                        threshold_in=0.05,
+                        threshold_out=0.1,
+                        max_vars=12,
+                        min_vars=4,
+                        verbose=False,
+                    ),
+                ),
             )
 
     logger.info(f"Month number {mnum} ready for computation\n")
