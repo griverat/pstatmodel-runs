@@ -1,7 +1,21 @@
 {
     "MONTH": "OCT",
     "INIT_MONTH": "10",
-    "FYEAR": 2022,
+    "MLIST": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+    ],
+    "FYEAR": 2023,
     "DATA_DIR": "/data/users/grivera/pstatmodel_data/RUNS/",
     "PISCO_DATA": "/data/users/grivera/PISCOPrecv2p1.nc",
     "PISCO_DATA_NEW": "/data/users/grivera/PISCO/PISCO_Prec_v2p1_unstable_timefix.nc",

@@ -1,7 +1,6 @@
 {
     "MONTH": "JUL",
     "INIT_MONTH": "07",
-    "FYEAR": 2023,
     "MLIST": [
         1,
         2,
@@ -16,6 +15,7 @@
         11,
         12
     ],
+    "FYEAR": 2023,
     "DATA_DIR": "/data/users/grivera/pstatmodel_data/RUNS/",
     "PISCO_DATA": "/data/users/grivera/PISCOPrecv2p1.nc",
     "MODEL_SRC": "/home/grivera/GitLab/pstatmodel-runs/RUNS/2022/07.JUL",
