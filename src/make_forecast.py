@@ -94,7 +94,8 @@ for mnum, nmodel in full_model.items():
 
 fcst_data = fcst_data.dropna(dim="time", how="all")
 
-logger.info(f"Saving netcdf data to {NC_DIR}")
+OUT_FILE = os.path.join(NC_DIR, "fcst_data.nc")
+logger.info(f"Saving netcdf data to {OUT_FILE}")
 fcst_data.name = "fcst_data"
-fcst_data.to_netcdf(os.path.join(NC_DIR, "fcst_data.nc"))
+fcst_data.to_netcdf(OUT_FILE)
 logger.info("Done")
